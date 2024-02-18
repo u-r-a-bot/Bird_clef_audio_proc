@@ -23,3 +23,9 @@
     filter: grayscale(75%);
 }
 
+.carousel-control-prev,
+.carousel-control-next {
+    outline: none;
+    box-shadow: none;
+    background: none;
+}
