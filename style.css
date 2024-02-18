@@ -14,3 +14,12 @@
     transition: background-color 0.3s ease;
     /* Add a smooth transition effect */
 }
+
+.carousel-item img {
+    transition: filter 0.5s ease-in-out;
+}
+
+.carousel-item img:hover {
+    filter: grayscale(75%);
+}
+
