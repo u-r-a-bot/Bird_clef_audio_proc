@@ -1,0 +1,16 @@
+/* Add your custom styles here */
+.logo {
+    height: 60px;
+    border-radius: 30px;
+}
+
+.main-content {
+    padding-top: 56px;
+}
+
+.navbar.darkened {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Adjust the background color and opacity as needed */
+    transition: background-color 0.3s ease;
+    /* Add a smooth transition effect */
+}
