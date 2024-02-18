@@ -36,54 +36,69 @@
             </ul>
         </div>
     </nav>
+
     <div class="main-content">
         <!-- Home Section with Bird Animation -->
         <section id="home" class="container mt-5">
             <h2>Home</h2>
-            <!-- Add your bird animation code here -->
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat veniam, odio quidem harum dicta dolorum
-            veritatis fuga tempora ea facere! Natus esse officiis consectetur laboriosam corrupti voluptate et labore
-            non.
-            Dicta ea totam harum. Cumque delectus dolore dolores facilis? Voluptas inventore quaerat pariatur, cumque,
-            laborum similique voluptatem dolorem ipsa aspernatur non eveniet nihil fugit. Dolores, ullam aut! A, nisi
-            ratione.
-            Alias, rerum at! Accusantium optio, suscipit esse deleniti vel exercitationem autem voluptatum eius ea totam
-            inventore sequi consequatur et dignissimos repudiandae nam facere animi fugiat expedita atque natus! Esse,
-            tenetur.
-            Enim molestiae consectetur veniam soluta modi minus magnam, omnis nesciunt nihil aut tempora nostrum rem
-            alias
-            quia repudiandae ipsam aperiam similique rerum vero explicabo perferendis odio. Laborum, maiores odio! Id.
-            Labore, eligendi rerum. Dolorem nulla tempore voluptatum quaerat unde consectetur eos, aut sunt. Voluptate
-            laboriosam ratione dolorum cum quis sed deserunt ab minima tempore iusto aspernatur blanditiis, adipisci
-            reprehenderit autem?
-            Dolores ipsa illo optio harum molestias dignissimos voluptatibus modi quam accusamus aut veniam ut vitae
-            cupiditate unde ea, pariatur asperiores perferendis fugiat et illum? Nobis consequatur aut eum iure ex!
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Text content on the left for medium and larger screens -->
+                    <p>
+                        Welcome to Tweeting for Protection, an innovative project dedicated to the conservation of
+                        endangered species. We utilize advanced voice recognition technology to identify and monitor
+                        these species through their distinctive audio signatures.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <!-- Image carousel on the right for medium and larger screens -->
+                    <div id="imageCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="himalayan-monal.webp" class="d-block w-100" alt="Himalayan Monal - Bird 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="img2.jpg" class="d-block w-100" alt="Bird 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="img5.jpg" class="d-block w-100" alt="Bird 3">
+                            </div>
+                            <!-- Add more carousel items as needed -->
+                        </div>
+                        <ol class="carousel-indicators">
+                            <li data-target="#imageCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#imageCarousel" data-slide-to="1"></li>
+                            <li data-target="#imageCarousel" data-slide-to="2"></li>
+                            <!-- Add more indicators as needed -->
+                        </ol>
+                        <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- About Section -->
         <section id="about" class="container mt-5">
             <h2>About</h2>
-            <!-- Add your about content here -->
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel culpa eos iure sint omnis labore voluptatem
-            dolor!
-            Rem molestiae quos dolores doloribus vel. Odio, qui dolor doloremque quia accusamus voluptas.
-            Ex eveniet pariatur id, quae, explicabo omnis possimus harum iusto consectetur, temporibus molestias quod
-            itaque
-            assumenda voluptate. Similique voluptas odio recusandae perferendis iure blanditiis neque, a sit minima
-            doloremque enim.
-            Suscipit repudiandae sapiente est similique accusantium tenetur eveniet sunt facilis, dignissimos pariatur
-            reprehenderit provident veritatis reiciendis vero hic quod perspiciatis, eum velit dolore mollitia quis ad,
-            temporibus ipsa nisi? Quae!
-            Suscipit, maiores repudiandae, placeat officia neque ratione beatae ad quae cupiditate sapiente quidem natus
-            dolore nobis. Quasi quidem, a repudiandae iusto dolorum nisi facere illo neque officia aperiam, eum amet.
-            Iure deserunt maxime ratione quia necessitatibus a reprehenderit commodi impedit, nihil omnis voluptas
-            voluptatem ipsam. Illo vel quas velit est reprehenderit labore, dolor quos ut molestias, explicabo beatae,
-            dolores dolore.
-            Unde quia maxime nisi hic itaque, neque harum expedita commodi error reiciendis numquam fuga perspiciatis
-            dicta
-            illo voluptatem eaque voluptatum corrupti doloremque at dolorum pariatur officiis adipisci inventore
-            deleniti!
-            Quia!
+            <p>Welcome to Tweeting for Protection, an innovative project dedicated to the conservation of endangered
+                species. We utilize advanced voice recognition technology to identify and monitor these species through
+                their distinctive audio signatures.</p>
+            <p>Through user-contributed audio recordings, we analyze and match patterns, aiding in the identification of
+                endangered species. This information is invaluable for researchers and conservationists working towards
+                preserving biodiversity and ecosystems.</p>
+            <p>Join us in this mission by uploading audio recordings of bird calls. Together, we can make a significant
+                impact on wildlife preservation and create a harmonious balance in our natural world.</p>
+            <p>You can find more information about their conservation here:</p>
+            <li><a href="https://www.worldwildlife.org/" target="_blank">World Wildlife Fund</a></li>
+            <li><a href="https://www.iucn.org/" target="_blank">International Union for Conservation of Nature
+                    (IUCN)</a></li>
         </section>
 
         <!-- Audio Section with File Input -->
@@ -94,52 +109,25 @@
                 <input type="file" class="form-control-file" id="audioInput" accept="audio/*">
             </div>
             <!-- Add additional audio processing elements if needed -->
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum fuga quo exercitationem reprehenderit veritatis
-            ipsum quae nobis modi laborum, voluptas laboriosam sit, nam, illum dicta! Eveniet cumque ab optio et!
-            Voluptatem ipsam cum obcaecati, tenetur delectus consequatur soluta dolore aliquam. Enim vitae non natus et,
-            distinctio aperiam facere dignissimos dolores voluptatum in. Ab quibusdam, nostrum reiciendis distinctio ad
-            ipsam dicta.
-            Ex quis porro iste laborum tempora ipsam quia unde rerum neque illum incidunt delectus eveniet maiores natus
-            odit quod, ipsa reprehenderit necessitatibus et, architecto adipisci molestias exercitationem! Velit,
-            aperiam?
-            Porro.
-            Perspiciatis aliquam mollitia accusamus maxime vero aspernatur modi obcaecati, ducimus distinctio, eligendi,
-            porro iure sint perferendis! Error minus ad veritatis animi impedit quam, voluptatibus excepturi ratione
-            atque
-            reiciendis omnis quos.
-            Earum voluptas facilis magnam labore dolor atque? Eaque eveniet sequi sed a dicta facilis vero voluptate
-            laborum
-            quisquam impedit libero ipsum, in facere minus excepturi, eos temporibus quas voluptatum quis.
-            Quo est eaque eligendi, excepturi ipsam dolorum repellendus ducimus! Fugiat dolorem dolores obcaecati
-            accusamus,
-            consequatur quo voluptatem delectus repellat perferendis, ut eligendi odio ipsam nulla velit expedita
-            consectetur suscipit architecto?
+            <p>Upload an audio recording of a bird call, and our system will analyze it to determine if it matches the
+                patterns of endangered species. Your contribution helps in monitoring and protecting wildlife.</p>
         </section>
 
         <!-- References Section -->
         <section id="references" class="container mt-5">
             <h2>References</h2>
             <!-- Add your references content here -->
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate corrupti laboriosam iste enim.
-            Reiciendis
-            dolores quam asperiores perferendis beatae quod quaerat aspernatur dolorum voluptates labore? Maxime officia
-            adipisci nesciunt hic?
-            Exercitationem incidunt asperiores quis vero. Fugiat facere totam consequuntur perferendis dolore enim,
-            explicabo harum vero assumenda porro architecto sequi, mollitia optio maiores minima ipsum. Eius dignissimos
-            dicta ut quas velit!
-            Eum non dicta ratione aut alias animi, dignissimos autem eveniet corporis cupiditate cum reiciendis vel quas
-            fuga, suscipit harum voluptatibus quam! Quas, iste quibusdam iusto tempora assumenda aperiam a ut?
-            Unde ullam, quod sapiente eaque ratione numquam obcaecati saepe a quia hic odio commodi molestias alias
-            perferendis! Exercitationem debitis ex, perferendis vero possimus repellat asperiores eaque et, vel
-            dignissimos
-            numquam.
-            Tempore veniam excepturi laudantium perferendis a vel sapiente voluptatem dolores delectus ipsa vitae esse
-            sint
-            velit saepe temporibus harum minus suscipit repellat voluptatibus, cumque similique. Doloribus qui a odio
-            recusandae?
-            Expedita laboriosam, dolorum, quas fugiat facere eaque temporibus, ipsa reprehenderit esse necessitatibus
-            consequuntur consectetur quaerat similique mollitia ea aperiam voluptates maxime itaque velit voluptas
-            praesentium modi! Ipsam reprehenderit quibusdam optio.
+            <p>We have referred to the following Research Papers for our project: </p>
+            <ul>
+
+                <li><a href="https://arxiv.org/abs/2107.04878" target="_blank">Weakly-Supervised Classification and
+                        Detection of Bird Sounds in the Wild.</a></li>
+                <li><a href="https://arxiv.org/abs/2104.01778" target="_blank">AST: Audio Spectrogram Transformer</a>
+                </li>
+                <li><a href="https://arxiv.org/abs/2211.07722" target="_blank">Analysing usage of Self Attention in
+                        identifying bird calls in soundscapes</a></li>
+                <!-- Add more references as needed -->
+            </ul>
 
             <footer class="container-fluid bg-dark text-light mt-5">
                 <div class="container py-3">
@@ -152,32 +140,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Custom Script for Updating Hash on Scroll -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var navbarHeight = document.querySelector('.navbar').offsetHeight;
-            var contentSections = document.querySelectorAll('.content-wrapper > section');
-
-            function updateHashOnScroll() {
-                var scrollPosition = window.scrollY || document.documentElement.scrollTop;
-
-                contentSections.forEach(function (section) {
-                    var sectionTop = section.offsetTop - navbarHeight;
-                    var sectionBottom = sectionTop + section.offsetHeight;
-
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                        history.replaceState(null, null, '#' + section.id);
-                    }
-                });
-            }
-
-            // Listen for scroll events
-            window.addEventListener('scroll', updateHashOnScroll);
-
-            // Call the function initially
-            updateHashOnScroll();
-        });
-    </script>
 
 </body>
 
