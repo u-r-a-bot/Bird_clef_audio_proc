@@ -7,12 +7,10 @@
     <title>Tweeting for Protection</title>
     <link rel="shortcut icon" href="bird-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css"> <!-- Create a CSS file for your custom styles -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <a class="navbar-brand" href="#"><img class="logo" src="bird-logo.png" alt=""></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -38,12 +36,10 @@
     </nav>
 
     <div class="main-content">
-        <!-- Home Section with Bird Animation -->
         <section id="home" class="container mt-5">
             <h2>Home</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <!-- Text content on the left for medium and larger screens -->
                     <p>
                         Welcome to Tweeting for Protection, an innovative project dedicated to the conservation of
                         endangered species. We utilize advanced voice recognition technology to identify and monitor
@@ -51,7 +47,6 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <!-- Image carousel on the right for medium and larger screens -->
                     <div id="imageCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -63,13 +58,11 @@
                             <div class="carousel-item">
                                 <img src="img5.jpg" class="d-block w-100" alt="Bird 3">
                             </div>
-                            <!-- Add more carousel items as needed -->
                         </div>
                         <ol class="carousel-indicators">
                             <li data-target="#imageCarousel" data-slide-to="0" class="active"></li>
                             <li data-target="#imageCarousel" data-slide-to="1"></li>
                             <li data-target="#imageCarousel" data-slide-to="2"></li>
-                            <!-- Add more indicators as needed -->
                         </ol>
                         <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -84,7 +77,6 @@
             </div>
         </section>
 
-        <!-- About Section -->
         <section id="about" class="container mt-5">
             <h2>About</h2>
             <p>Welcome to Tweeting for Protection, an innovative project dedicated to the conservation of endangered
@@ -101,22 +93,19 @@
                     (IUCN)</a></li>
         </section>
 
-        <!-- Audio Section with File Input -->
         <section id="audio" class="container mt-5">
             <h2>Audio</h2>
             <div class="form-group">
                 <label for="audioInput">Upload Audio File:</label>
                 <input type="file" class="form-control-file" id="audioInput" accept="audio/*">
+                <button type="button" class="btn btn-primary mt-2" id="uploadButton">Upload</button>
             </div>
-            <!-- Add additional audio processing elements if needed -->
             <p>Upload an audio recording of a bird call, and our system will analyze it to determine if it matches the
                 patterns of endangered species. Your contribution helps in monitoring and protecting wildlife.</p>
         </section>
 
-        <!-- References Section -->
         <section id="references" class="container mt-5">
             <h2>References</h2>
-            <!-- Add your references content here -->
             <p>We have referred to the following Research Papers for our project: </p>
             <ul>
 
@@ -126,7 +115,6 @@
                 </li>
                 <li><a href="https://arxiv.org/abs/2211.07722" target="_blank">Analysing usage of Self Attention in
                         identifying bird calls in soundscapes</a></li>
-                <!-- Add more references as needed -->
             </ul>
 
             <footer class="container-fluid bg-dark text-light mt-5">
@@ -140,7 +128,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
-
 </html>
