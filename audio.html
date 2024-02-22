@@ -19,7 +19,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">About the project</a>
+                    <a class="nav-link" href="/">About the project</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="audio.html">Audio Analysis</a>
@@ -35,9 +35,10 @@
         <section id="audio" class="container mt-5">
             <h2>Audio Analysis</h2>
             <div class="form-group">
-                <label for="audioInput">Upload Audio File:</label>
-                <input type="file" class="form-control-file" id="audioInput" accept="audio/*">
-                <button type="button" class="btn btn-primary mt-3" id="uploadButton">Upload</button>
+                <form for="audioInput" enctype="multipart/form-data" method="post">Upload Audio File:
+                    <input type="file" class="form-control-file" id="audioInput" name="audioInput" accept="audio/*">
+                    <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload</button>
+                </form>
             </div>
 
             <p class="mt-4">
