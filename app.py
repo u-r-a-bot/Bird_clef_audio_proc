@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
+from model_call import *
 from flask import Flask, render_template, request, redirect, url_for, send_file, send_from_directory
 app = Flask(__name__)
 
@@ -39,6 +40,7 @@ def upload_audio():
             
         file_path = os.path.join(uploads_dir, audio.filename)
         audio.save(file_path)
+        get_predictions(file_path)
         new_audio = AudioFile(audio_data=audio_data)
         db.session.add(new_audio)
         db.session.commit()
