@@ -60,13 +60,13 @@ def get_predictions(inp_path ):
     except:
         print("Loading through script failed trying to use model load")
         try:
-            loaded_model = torch.load("model_effnet_b0_model.pth")
+            loaded_model = torch.load("model_effnet_b0_model.pth", map_location=torch.device('cpu'))
             print("Load Successful")
         except:
             print("Loading directly Failed. Loading model using state dict")
             try:
                 loaded_model = BirdClefModel()
-                loaded_model.load_state_dict(torch.load(model_path_state_dict))
+                loaded_model.load_state_dict(torch.load(model_path_state_dict, map_location=torch.device('cpu')))
                 print("Load Successful")
             except Exception as e:
                 print(e)
