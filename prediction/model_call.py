@@ -4,9 +4,8 @@ from tqdm import tqdm
 from pathlib import Path
 import numpy as np
 import librosa
-import 
 import timm
-path_to_model = Path("text")
+import requests
 
 class BirdClefModel(nn.Module):
     def __init__(self , output_size = 264):
@@ -47,10 +46,17 @@ def preprocess_audio(audio_path, sampling_rate = 32000 , num_mels = 128 ,
     return audio
 
 
-def get_predictions(inp_path , path_to_model = path_to_model): 
+def get_predictions(inp_path ): 
+    state_dict_file_url = "https://github.com/u-r-a-bot/Bird_clef_audio_proc/raw/main/prediction/model_effnet_b0_state_dict.pth"
+    model_path_state_dict = Path("model_effnet_b0_state_dict.pth")
+    print("Model Downloading")
+    request = requests.get(state_dict_file_url)
+    with open(model_path_state_dict, "wb") as f:
+        f.write(request.content)
+    
     audio = preprocess_audio(audio_path=inp_path)
     try:
-        loaded_model = torch.jit.load(path_to_model)
+        loaded_model = torch.jit.load(path_to_script)
     except:
         print("Loading through script failed trying to use model load")
         try:
@@ -60,7 +66,7 @@ def get_predictions(inp_path , path_to_model = path_to_model):
             print("Loading directly Failed. Loading model using state dict")
             try:
                 loaded_model = BirdClefModel()
-                loaded_model.load_state_dict(torch.load("D:/audiomodel/model_effnet_b0_state_dict.pth"))
+                loaded_model.load_state_dict(torch.load(model_path_state_dict))
                 print("Load Successful")
             except Exception as e:
                 print(e)
