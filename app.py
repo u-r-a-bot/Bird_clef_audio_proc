@@ -39,11 +39,13 @@ def upload_audio():
             os.makedirs(uploads_dir)
             
         file_path = os.path.join(uploads_dir, audio.filename)
-        audio.save(file_path)
-        get_predictions(file_path)
+        with open(file_path,'wb') as f:
+            f.write(audio_data)
+        data = get_predictions(file_path)
         new_audio = AudioFile(audio_data=audio_data)
         db.session.add(new_audio)
         db.session.commit()
+        return render_template('audio.html', data = data)
     return render_template('audio.html')
 
 """ @app.route('/play/<filename>')
