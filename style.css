@@ -1,3 +1,10 @@
+/* Gradient Background */
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #bdecb6, #ffffff);
+}
+
 .logo {
     height: 60px;
     border-radius: 30px;
@@ -17,8 +24,10 @@
 }
 
 .navbar {
+    position: relative;
+    z-index: 1;
     padding: 20px 40px;
-    background-color: #f8f9fa;
+    background: linear-gradient(to right, #bdecb6, #ffffff);
 }
 
 .navbar-nav {
@@ -32,4 +41,21 @@
 
 .navbar-nav .nav-link:hover {
     color: #007BFF;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+
+#imageCarousel {
+    margin: auto;
+    max-width: 600px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.right-txt {
+    font-size: larger;
 }
