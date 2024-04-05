@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
+import requests
 from model_call import *
 from flask import Flask, render_template, request, redirect, url_for, send_file, send_from_directory
 app = Flask(__name__)
@@ -14,6 +15,17 @@ class AudioFile(db.Model):
     
 #with app.app_context():
     #db.create_all()
+    
+def fetch_bird_image(bird_name, api_key = "ffPnG8Fl26jOZAJnlpO4nwid7eZ_WaPcMY_Wasy_TPU"):
+    url = f"https://api.unsplash.com/search/photos/?query={bird_name}&client_id={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    
+    if 'results' in data and len(data['results']) > 0:
+        image_url = data['results'][0]['urls']['regular']
+        return image_url
+    else:
+        return None
 
 @app.route('/')
 def index():
@@ -42,10 +54,18 @@ def upload_audio():
         with open(file_path,'wb') as f:
             f.write(audio_data)
         data = get_predictions(file_path)
+        image_url = None
+        try:
+            image_url = fetch_bird_image(data, )
+        
+        except Exception:
+            print("Image not retrieved")
+        
         new_audio = AudioFile(audio_data=audio_data)
         db.session.add(new_audio)
         db.session.commit()
-        return render_template('audio.html', data = data)
+        return render_template('audio.html', data = data, image_url = image_url)
+        
     return render_template('audio.html')
 
 """ @app.route('/play/<filename>')
