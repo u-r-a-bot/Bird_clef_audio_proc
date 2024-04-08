@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tweeting for Protection - Audio Analysis</title>
+    <link rel="icon" type="image/x-icon" href="/static/bird-logo.png">
     <link rel="shortcut icon" href="bird-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
@@ -33,19 +34,64 @@
 
     <div class="main-content">
         <section id="audio" class="container mt-5">
+
             <h2>Audio Analysis</h2>
-            <div class="form-group">
-                <form for="audioInput" enctype="multipart/form-data" method="post">Upload Audio File:
-                    <input type="file" class="form-control-file" id="audioInput" name="audioInput" accept="audio/*">
-                    <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload</button>
-                </form>
+            <h1>Upload Audio Files</h1>
+            <div id="drop-area" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+                <p>Drag & drop audio files here</p>
             </div>
+
+            <script>
+                function dropHandler(ev) {
+                    ev.preventDefault();
+                    if (ev.dataTransfer.items) {
+                        for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+                            if (ev.dataTransfer.items[i].kind === 'file') {
+                                let file = ev.dataTransfer.items[i].getAsFile();
+                                handleFile(file);
+                            }
+                        }
+                    } else {
+                        for (let i = 0; i < ev.dataTransfer.files.length; i++) {
+                            handleFile(ev.dataTransfer.files[i]);
+                        }
+                    }
+                }
+
+                function handleFile(file) {
+                    const audio = document.createElement('audio');
+                    const source = document.createElement('source');
+                    source.src = URL.createObjectURL(file);
+                    audio.appendChild(source);
+                    audio.controls = true;
+                    document.getElementById('drop-area').appendChild(audio);
+
+                    // Send file to backend
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/upload', true);
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            console.log('File uploaded successfully');
+                        } else {
+                            console.error('Error occurred while uploading file');
+                        }
+                    };
+                    xhr.send(formData);
+                }
+
+                function dragOverHandler(ev) {
+                    ev.preventDefault();
+                }
+            </script>
 
             <div>
                 <p>The bird name is: {{data}}</p>
             </div>
 
-            <img src = "{{image_url}}", alt = "Bird Image">
+            <img style="height: 575px;width: 750px;" src = "{{image_url}}" alt = "Bird Image">
 
             <br>
 
