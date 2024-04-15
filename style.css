@@ -1,11 +1,20 @@
+@import url(https://fonts.googleapis.com/css?family=Khula:700);
+
 /* Gradient Background */
 body {
     color: white;
     margin: 0;
     padding: 0;
-    background: radial-gradient(rgb(249, 0, 0), rgb(99, 99, 255));
+    background: white;
+    /* background: radial-gradient(rgb(249, 0, 0), rgb(99, 99, 255)); */
     /* background: linear-gradient(to right, #4e5cf7, #cbf3a3); */
     padding-bottom: 50px;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .links {
@@ -53,20 +62,46 @@ body {
 .row {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    /* Align items to the start of the flex container */
 }
+
 
 /* Add this CSS to ensure equal spacing */
 .image-accordion {
+    margin-left: 0;
+    /* Adjust this value as needed */
     display: flex;
-    /*justify-content: space-between;
-    /* Distribute items evenly */
-    /*flex-wrap: wrap;
-    gap: 10px;*/
     width: 500px;
     height: 500px;
-    display: flex;
     gap: 15px;
 }
+
+.col-md-6 {
+    margin-left: 0px;
+    padding-left: 0px;
+    /* Adjust this value as needed */
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.flex-item {
+    flex: 0 0 48%;
+    /* Adjust the width as needed */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Adjust column width as needed */
+    grid-gap: 20px;
+    /* Adjust gap between columns */
+}
+
 
 .image-item {
     width: 20%;
@@ -250,4 +285,32 @@ body {
     left: 0;
     top: 0;
     border-radius: 10px;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.console-container {
+
+    font-family: Khula;
+    font-size: 4em;
+    text-align: center;
+    height: 200px;
+    width: 600px;
+    display: block;
+    position: absolute;
+    color: white;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.console-underscore {
+    display: inline-block;
+    position: relative;
+    top: -0.14em;
+    left: 10px;
 }
