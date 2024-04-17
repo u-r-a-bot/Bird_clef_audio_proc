@@ -66,13 +66,13 @@ canvas {
     /* Align items to the start of the flex container */
 }
 
-
 /* Add this CSS to ensure equal spacing */
 .image-accordion {
+    margin-top: 150px;
     margin-left: 0;
     /* Adjust this value as needed */
     display: flex;
-    width: 500px;
+    width: 700px;
     height: 500px;
     gap: 15px;
 }
@@ -184,6 +184,7 @@ canvas {
     color: black;
     background: rgb(237, 236, 236);
     padding: 20px;
+
 }
 
 .border-bottom {
@@ -297,7 +298,7 @@ canvas {
     font-size: 4em;
     text-align: center;
     height: 200px;
-    width: 600px;
+    width: 750px;
     display: block;
     position: absolute;
     color: white;
@@ -313,4 +314,12 @@ canvas {
     position: relative;
     top: -0.14em;
     left: 10px;
+}
+
+#c {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    /* Ensure canvas is behind other content */
 }
