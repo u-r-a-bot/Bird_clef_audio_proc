@@ -31,7 +31,7 @@ canvas {
 }
 
 .navbar.darkened {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #0a0a26;
     transition: background-color 0.3s ease;
 }
 
@@ -43,7 +43,8 @@ canvas {
     position: relative;
     z-index: 1;
     padding: 20px 40px;
-    background: linear-gradient(to right, #67c559, #cbf3a3);
+    background-color: #0a0a26;
+    color: white;
 }
 
 .navbar-nav {
@@ -322,4 +323,57 @@ canvas {
     left: 0;
     z-index: -1;
     /* Ensure canvas is behind other content */
+}
+
+/* Media Query for Smaller Screens */
+@media (max-width: 768px) {
+    .image-accordion {
+        margin-top: 50px;
+        /* Adjust the top margin */
+        width: 100%;
+        /* Make the image accordion full width */
+        display: flex;
+        flex-wrap: wrap;
+        /* Allow items to wrap */
+        justify-content: center;
+        /* Center items horizontally */
+    }
+
+    .col-md-6 {
+        margin-left: 0;
+        /* Reset margin */
+        padding-left: 0;
+        /* Reset padding */
+        margin-top: 20px;
+        /* Adjust top margin */
+    }
+
+    .image-item {
+        width: 100%;
+        /* Make each image item full width */
+    }
+
+    .image-item:hover {
+        width: 100%;
+        /* Ensure hover effect covers full width */
+    }
+
+    .image-item .layer {
+        margin-top: -150px;
+        /* Adjust layer margin top */
+    }
+
+    .space {
+        margin-top: 50px;
+        /* Adjust space between sections */
+    }
+
+    .console-container {
+        width: auto;
+        /* Remove fixed width */
+        max-width: 90%;
+        /* Limit width for smaller screens */
+        font-size: 2em;
+        /* Adjust font size for smaller screens */
+    }
 }
