@@ -1,168 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tweeting for Protection - Audio Analysis</title>
-    <link
-      rel="shortcut icon"
-      href="/static/bird-logo.png"
-      type="image/x-icon"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="/static/style.css" />
-    <style>
-      #dropZone {
-        border: 2px dashed #ccc;
-        width: 336px;
-        height: 69px;
-        text-align: center;
-        padding: 10px;
-        margin-bottom: 20px;
-      }
 
-      #map {
-        width: 100%;
-        height: 400px;
-      }
-    </style>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tweeting for Protection - Audio Analysis</title>
+  <link rel="shortcut icon" href="bird-logo.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #dropZone {
+      border: 2px dashed #ccc;
+      width: 336px;
+      height: 69px;
+      text-align: center;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
 
-  <body>
-    <div class="main-content">
-      <canvas id="c"></canvas>
-      <section id="audio" class="container mt-5">
-        <h2>Audio Analysis</h2>
-        <h1>Upload Audio Files</h1>
-        <form id="upload-form" method="post" enctype="multipart/form-data">
-          <input
-            type="file"
-            id="file-input"
-            name="file"
-            accept="audio/*"
-            multiple
-            style="display: none"
-          />
-        </form>
-        <button onclick="document.getElementById('file-input').click();">
-          Choose Files Here
-        </button>
-        <button
-          onclick="uploadFiles();"
-          class="button-85 btn btn-primary mt-3"
-          role="button"
-        >
-          Upload
-        </button>
-        <div class="alert alert-info mt-4" role="alert">
-          <strong>Remember:</strong> Ensure your audio file is in a standard
-          format (e.g., MP3, WAV) for accurate analysis. Only the first five
-          seconds of the audio will be analyzed.
-        </div>
-        <div id="file-names"></div>
-        <div id="results"></div>
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script>
-          let latitude, longitude;
+    #map {
+      width: 100%;
+      height: 400px;
+    }
+  </style>
+</head>
 
-          function uploadFiles() {
-            const files = document.getElementById("file-input").files;
-            if (files.length === 0) {
-              alert("Please select at least one file.");
-              return;
-            }
+<body>
+  <nav class="navbar navbar-expand-lg  fixed-top" style="background-color: #0a0a26;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item ">
+          <a class="nav-link" href="index.html" style="color: white;">About the project</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#" style="color: white;">Audio Analysis</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="references.html" style="color: white;">Endangered Species</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="main-content">
+    <canvas id="c"></canvas>
+    <section id="audio" class="container mt-5">
+      <h2>Audio Analysis</h2>
+      <h1>Upload Audio Files</h1>
+      <form id="upload-form" method="post" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file" accept="audio/*" multiple style="display: none" />
+      </form>
+      <button onclick="document.getElementById('file-input').click();">
+        Choose Files Here
+      </button>
+      <button onclick="uploadFiles();" class="button-85 btn btn-primary mt-3" role="button">
+        Upload
+      </button>
+      <div class="alert alert-info mt-4" role="alert">
+        <strong>Remember:</strong> Ensure your audio file is in a standard
+        format (e.g., MP3, WAV) for accurate analysis. Only the first five
+        seconds of the audio will be analyzed.
+      </div>
+      <div id="file-names"></div>
+      <div id="results"></div>
+      <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+      <script>
+        let latitude, longitude;
 
-            const formData = new FormData();
-            for (const file of files) {
-              formData.append("file", file);
-            }
+        function uploadFiles() {
+          const files = document.getElementById("file-input").files;
+          if (files.length === 0) {
+            alert("Please select at least one file.");
+            return;
+          }
 
-            fetch("/upload", {
-              method: "POST",
-              body: formData,
+          const formData = new FormData();
+          for (const file of files) {
+            formData.append("file", file);
+          }
+
+          fetch("/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              sessionStorage.setItem("results", JSON.stringify(data.results));
+              location.reload();
             })
-              .then((response) => response.json())
-              .then((data) => {
-                sessionStorage.setItem("results", JSON.stringify(data.results));
-                location.reload();
-              })
-              .catch((error) => console.error("Error:", error));
-          }
+            .catch((error) => console.error("Error:", error));
+        }
 
-          function displayResults() {
-            const storedResults = sessionStorage.getItem("results");
-            if (storedResults) {
-              const results = JSON.parse(storedResults);
-              const resultsDiv = document.getElementById("results");
-              resultsDiv.innerHTML = "";
+        function displayResults() {
+          const storedResults = sessionStorage.getItem("results");
+          if (storedResults) {
+            const results = JSON.parse(storedResults);
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
 
-              for (const result of results) {
-                const predictions = result.predictions;
-                const imageURL = result.imageURL;
-                latitude = result.latitude;
-                longitude = result.longitude;
+            for (const result of results) {
+              const predictions = result.predictions;
+              const imageURL = result.imageURL;
+              latitude = result.latitude;
+              longitude = result.longitude;
 
-                const resultElement = document.createElement("div");
-                resultElement.innerHTML = `<p>Bird Name: ${predictions}</p>`;
-                if (imageURL) {
-                  const imgElement = document.createElement("img");
-                  imgElement.src = imageURL;
-                  imgElement.style.maxWidth = "100%";
-                  imgElement.style.height = "300px";
-                  resultElement.appendChild(imgElement);
-                }
-                resultsDiv.appendChild(resultElement);
-
-                const map = L.map("map").setView([20.5937, 78.9629], 1);
-                L.tileLayer(
-                  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                  {
-                    attribution:
-                      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                  }
-                ).addTo(map);
-
-                for (let i = 0; i < latitude.length; i++) {
-                  L.marker([latitude[i], longitude[i]]).addTo(map);
-                }
+              const resultElement = document.createElement("div");
+              resultElement.innerHTML = `<p>Bird Name: ${predictions}</p>`;
+              if (imageURL) {
+                const imgElement = document.createElement("img");
+                imgElement.src = imageURL;
+                imgElement.style.maxWidth = "100%";
+                imgElement.style.height = "300px";
+                resultElement.appendChild(imgElement);
               }
-            } else {
-              // Clear HTML content when no results found
-              const resultsDiv = document.getElementById("results");
-              resultsDiv.innerHTML = "";
+              resultsDiv.appendChild(resultElement);
+
+              const map = L.map("map").setView([20.5937, 78.9629], 1);
+              L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+                  attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                }
+              ).addTo(map);
+
+              for (let i = 0; i < latitude.length; i++) {
+                L.marker([latitude[i], longitude[i]]).addTo(map);
+              }
             }
+          } else {
+            // Clear HTML content when no results found
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
           }
+        }
 
-          document.addEventListener("DOMContentLoaded", function () {
-            displayResults();
-            sessionStorage.removeItem("results"); // Clear sessionStorage after displaying results
+        document.addEventListener("DOMContentLoaded", function () {
+          displayResults();
+          sessionStorage.removeItem("results"); // Clear sessionStorage after displaying results
+        });
+
+        document
+          .getElementById("file-input")
+          .addEventListener("change", function () {
+            const fileNamesDiv = document.getElementById("file-names");
+            fileNamesDiv.innerHTML = "";
+
+            for (const file of this.files) {
+              const fileNameElement = document.createElement("p");
+              fileNameElement.textContent = file.name;
+              fileNamesDiv.appendChild(fileNameElement);
+            }
           });
+      </script>
+    </section>
+  </div>
 
-          document
-            .getElementById("file-input")
-            .addEventListener("change", function () {
-              const fileNamesDiv = document.getElementById("file-names");
-              fileNamesDiv.innerHTML = "";
+  <div class="map-container" style="padding-left: 100px">
+    <div id="map" style="border-radius: 15px; height: 700px"></div>
+  </div>
 
-              for (const file of this.files) {
-                const fileNameElement = document.createElement("p");
-                fileNameElement.textContent = file.name;
-                fileNamesDiv.appendChild(fileNameElement);
-              }
-            });
-        </script>
-      </section>
-    </div>
-
-    <div class="map-container" style="padding-left: 100px">
-      <div id="map" style="border-radius: 15px; height: 700px"></div>
-    </div>
-
-    <!-- <script>
+  <!-- <script>
         function allowDrop(event) {
             event.preventDefault();
         }
@@ -196,362 +198,363 @@
             .bindPopup('Hello! This is India.');
 
     </script> -->
-    <script>
-      var w = (c.width = window.innerWidth),
-        h = (c.height = 1500),
-        ctx = c.getContext("2d"),
-        opts = {
-          range: 180,
-          baseConnections: 3,
-          addedConnections: 5,
-          baseSize: 5,
-          minSize: 1,
-          dataToConnectionSize: 0.4,
-          sizeMultiplier: 0.7,
-          allowedDist: 40,
-          baseDist: 40,
-          addedDist: 30,
-          connectionAttempts: 100,
+  <script>
+    var w = (c.width = window.innerWidth),
+      h = (c.height = 1500),
+      ctx = c.getContext("2d"),
+      opts = {
+        range: 180,
+        baseConnections: 3,
+        addedConnections: 5,
+        baseSize: 5,
+        minSize: 1,
+        dataToConnectionSize: 0.4,
+        sizeMultiplier: 0.7,
+        allowedDist: 40,
+        baseDist: 40,
+        addedDist: 30,
+        connectionAttempts: 100,
 
-          dataToConnections: 1,
-          baseSpeed: 0.04,
-          addedSpeed: 0.05,
-          baseGlowSpeed: 0.4,
-          addedGlowSpeed: 0.4,
+        dataToConnections: 1,
+        baseSpeed: 0.04,
+        addedSpeed: 0.05,
+        baseGlowSpeed: 0.4,
+        addedGlowSpeed: 0.4,
 
-          rotVelX: 0.003,
-          rotVelY: 0.002,
+        rotVelX: 0.003,
+        rotVelY: 0.002,
 
-          repaintColor: "#111",
-          connectionColor: "hsla(200,60%,light%,alp)",
-          rootColor: "hsla(0,60%,light%,alp)",
-          endColor: "hsla(160,20%,light%,alp)",
-          dataColor: "hsla(40,80%,light%,alp)",
+        repaintColor: "#111",
+        connectionColor: "hsla(200,60%,light%,alp)",
+        rootColor: "hsla(0,60%,light%,alp)",
+        endColor: "hsla(160,20%,light%,alp)",
+        dataColor: "hsla(40,80%,light%,alp)",
 
-          wireframeWidth: 0.1,
-          wireframeColor: "#88f",
+        wireframeWidth: 0.1,
+        wireframeColor: "#88f",
 
-          depth: 250,
-          focalLength: 250,
-          vanishPoint: {
-            x: w / 2,
-            y: h / 2,
-          },
+        depth: 250,
+        focalLength: 250,
+        vanishPoint: {
+          x: w / 2,
+          y: h / 2,
         },
-        squareRange = opts.range * opts.range,
-        squareAllowed = opts.allowedDist * opts.allowedDist,
-        mostDistant = opts.depth + opts.range,
-        sinX = (sinY = 0),
-        cosX = (cosY = 0),
-        connections = [],
-        toDevelop = [],
-        data = [],
-        all = [],
-        tick = 0,
-        totalProb = 0,
-        animating = false,
-        Tau = Math.PI * 2;
+      },
+      squareRange = opts.range * opts.range,
+      squareAllowed = opts.allowedDist * opts.allowedDist,
+      mostDistant = opts.depth + opts.range,
+      sinX = (sinY = 0),
+      cosX = (cosY = 0),
+      connections = [],
+      toDevelop = [],
+      data = [],
+      all = [],
+      tick = 0,
+      totalProb = 0,
+      animating = false,
+      Tau = Math.PI * 2;
 
-      ctx.fillStyle = "#222";
-      ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = "#ccc";
-      ctx.font = "50px Verdana";
-      ctx.fillText(
-        "Calculating Nodes",
-        w / 2 - ctx.measureText("Calculating Nodes").width / 2,
-        h / 2 - 15
+    ctx.fillStyle = "#222";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#ccc";
+    ctx.font = "50px Verdana";
+    ctx.fillText(
+      "Calculating Nodes",
+      w / 2 - ctx.measureText("Calculating Nodes").width / 2,
+      h / 2 - 15
+    );
+
+    window.setTimeout(init, 4); // to render the loading screen
+
+    function init() {
+      connections.length = 0;
+      data.length = 0;
+      all.length = 0;
+      toDevelop.length = 0;
+
+      var connection = new Connection(0, 0, 0, opts.baseSize);
+      connection.step = Connection.rootStep;
+      connections.push(connection);
+      all.push(connection);
+      connection.link();
+
+      while (toDevelop.length > 0) {
+        toDevelop[0].link();
+        toDevelop.shift();
+      }
+
+      if (!animating) {
+        animating = true;
+        anim();
+      }
+    }
+    function Connection(x, y, z, size) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      this.size = size;
+
+      this.screen = {};
+
+      this.links = [];
+      this.probabilities = [];
+      this.isEnd = false;
+
+      this.glowSpeed =
+        opts.baseGlowSpeed + opts.addedGlowSpeed * Math.random();
+    }
+    Connection.prototype.link = function () {
+      if (this.size < opts.minSize) return (this.isEnd = true);
+
+      var links = [],
+        connectionsNum =
+          (opts.baseConnections + Math.random() * opts.addedConnections) | 0,
+        attempt = opts.connectionAttempts,
+        alpha,
+        beta,
+        len,
+        cosA,
+        sinA,
+        cosB,
+        sinB,
+        pos = {},
+        passedExisting,
+        passedBuffered;
+
+      while (links.length < connectionsNum && --attempt > 0) {
+        alpha = Math.random() * Math.PI;
+        beta = Math.random() * Tau;
+        len = opts.baseDist + opts.addedDist * Math.random();
+
+        cosA = Math.cos(alpha);
+        sinA = Math.sin(alpha);
+        cosB = Math.cos(beta);
+        sinB = Math.sin(beta);
+
+        pos.x = this.x + len * cosA * sinB;
+        pos.y = this.y + len * sinA * sinB;
+        pos.z = this.z + len * cosB;
+
+        if (pos.x * pos.x + pos.y * pos.y + pos.z * pos.z < squareRange) {
+          passedExisting = true;
+          passedBuffered = true;
+          for (var i = 0; i < connections.length; ++i)
+            if (squareDist(pos, connections[i]) < squareAllowed)
+              passedExisting = false;
+
+          if (passedExisting)
+            for (var i = 0; i < links.length; ++i)
+              if (squareDist(pos, links[i]) < squareAllowed)
+                passedBuffered = false;
+
+          if (passedExisting && passedBuffered)
+            links.push({ x: pos.x, y: pos.y, z: pos.z });
+        }
+      }
+
+      if (links.length === 0) this.isEnd = true;
+      else {
+        for (var i = 0; i < links.length; ++i) {
+          var pos = links[i],
+            connection = new Connection(
+              pos.x,
+              pos.y,
+              pos.z,
+              this.size * opts.sizeMultiplier
+            );
+
+          this.links[i] = connection;
+          all.push(connection);
+          connections.push(connection);
+        }
+        for (var i = 0; i < this.links.length; ++i)
+          toDevelop.push(this.links[i]);
+      }
+    };
+    Connection.prototype.step = function () {
+      this.setScreen();
+      this.screen.color = (this.isEnd ? opts.endColor : opts.connectionColor)
+        .replace("light", 30 + ((tick * this.glowSpeed) % 30))
+        .replace("alp", 0.2 + (1 - this.screen.z / mostDistant) * 0.8);
+
+      for (var i = 0; i < this.links.length; ++i) {
+        ctx.moveTo(this.screen.x, this.screen.y);
+        ctx.lineTo(this.links[i].screen.x, this.links[i].screen.y);
+      }
+    };
+    Connection.rootStep = function () {
+      this.setScreen();
+      this.screen.color = opts.rootColor
+        .replace("light", 30 + ((tick * this.glowSpeed) % 30))
+        .replace("alp", (1 - this.screen.z / mostDistant) * 0.8);
+
+      for (var i = 0; i < this.links.length; ++i) {
+        ctx.moveTo(this.screen.x, this.screen.y);
+        ctx.lineTo(this.links[i].screen.x, this.links[i].screen.y);
+      }
+    };
+    Connection.prototype.draw = function () {
+      ctx.fillStyle = this.screen.color;
+      ctx.beginPath();
+      ctx.arc(
+        this.screen.x,
+        this.screen.y,
+        this.screen.scale * this.size,
+        0,
+        Tau
       );
+      ctx.fill();
+    };
+    function Data(connection) {
+      this.glowSpeed =
+        opts.baseGlowSpeed + opts.addedGlowSpeed * Math.random();
+      this.speed = opts.baseSpeed + opts.addedSpeed * Math.random();
 
-      window.setTimeout(init, 4); // to render the loading screen
+      this.screen = {};
 
-      function init() {
-        connections.length = 0;
-        data.length = 0;
-        all.length = 0;
-        toDevelop.length = 0;
+      this.setConnection(connection);
+    }
+    Data.prototype.reset = function () {
+      this.setConnection(connections[0]);
+      this.ended = 2;
+    };
+    Data.prototype.step = function () {
+      this.proportion += this.speed;
 
-        var connection = new Connection(0, 0, 0, opts.baseSize);
-        connection.step = Connection.rootStep;
-        connections.push(connection);
-        all.push(connection);
-        connection.link();
+      if (this.proportion < 1) {
+        this.x = this.ox + this.dx * this.proportion;
+        this.y = this.oy + this.dy * this.proportion;
+        this.z = this.oz + this.dz * this.proportion;
+        this.size =
+          (this.os + this.ds * this.proportion) * opts.dataToConnectionSize;
+      } else this.setConnection(this.nextConnection);
 
-        while (toDevelop.length > 0) {
-          toDevelop[0].link();
-          toDevelop.shift();
-        }
+      this.screen.lastX = this.screen.x;
+      this.screen.lastY = this.screen.y;
+      this.setScreen();
+      this.screen.color = opts.dataColor
+        .replace("light", 40 + ((tick * this.glowSpeed) % 50))
+        .replace("alp", 0.2 + (1 - this.screen.z / mostDistant) * 0.6);
+    };
+    Data.prototype.draw = function () {
+      if (this.ended) return --this.ended; // not sre why the thing lasts 2 frames, but it does
 
-        if (!animating) {
-          animating = true;
-          anim();
-        }
+      ctx.beginPath();
+      ctx.strokeStyle = this.screen.color;
+      ctx.lineWidth = this.size * this.screen.scale;
+      ctx.moveTo(this.screen.lastX, this.screen.lastY);
+      ctx.lineTo(this.screen.x, this.screen.y);
+      ctx.stroke();
+    };
+    Data.prototype.setConnection = function (connection) {
+      if (connection.isEnd) this.reset();
+      else {
+        this.connection = connection;
+        this.nextConnection =
+          connection.links[(connection.links.length * Math.random()) | 0];
+
+        this.ox = connection.x; // original coordinates
+        this.oy = connection.y;
+        this.oz = connection.z;
+        this.os = connection.size; // base size
+
+        this.nx = this.nextConnection.x; // new
+        this.ny = this.nextConnection.y;
+        this.nz = this.nextConnection.z;
+        this.ns = this.nextConnection.size;
+
+        this.dx = this.nx - this.ox; // delta
+        this.dy = this.ny - this.oy;
+        this.dz = this.nz - this.oz;
+        this.ds = this.ns - this.os;
+
+        this.proportion = 0;
       }
-      function Connection(x, y, z, size) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.size = size;
+    };
+    Connection.prototype.setScreen = Data.prototype.setScreen = function () {
+      var x = this.x,
+        y = this.y,
+        z = this.z;
 
-        this.screen = {};
+      // apply rotation on X axis
+      var Y = y;
+      y = y * cosX - z * sinX;
+      z = z * cosX + Y * sinX;
 
-        this.links = [];
-        this.probabilities = [];
-        this.isEnd = false;
+      // rot on Y
+      var Z = z;
+      z = z * cosY - x * sinY;
+      x = x * cosY + Z * sinY;
 
-        this.glowSpeed =
-          opts.baseGlowSpeed + opts.addedGlowSpeed * Math.random();
-      }
-      Connection.prototype.link = function () {
-        if (this.size < opts.minSize) return (this.isEnd = true);
+      this.screen.z = z;
 
-        var links = [],
-          connectionsNum =
-            (opts.baseConnections + Math.random() * opts.addedConnections) | 0,
-          attempt = opts.connectionAttempts,
-          alpha,
-          beta,
-          len,
-          cosA,
-          sinA,
-          cosB,
-          sinB,
-          pos = {},
-          passedExisting,
-          passedBuffered;
+      // translate on Z
+      z += opts.depth;
 
-        while (links.length < connectionsNum && --attempt > 0) {
-          alpha = Math.random() * Math.PI;
-          beta = Math.random() * Tau;
-          len = opts.baseDist + opts.addedDist * Math.random();
+      this.screen.scale = opts.focalLength / z;
+      this.screen.x = opts.vanishPoint.x + x * this.screen.scale;
+      this.screen.y = opts.vanishPoint.y + y * this.screen.scale;
+    };
+    function squareDist(a, b) {
+      var x = b.x - a.x,
+        y = b.y - a.y,
+        z = b.z - a.z;
 
-          cosA = Math.cos(alpha);
-          sinA = Math.sin(alpha);
-          cosB = Math.cos(beta);
-          sinB = Math.sin(beta);
+      return x * x + y * y + z * z;
+    }
 
-          pos.x = this.x + len * cosA * sinB;
-          pos.y = this.y + len * sinA * sinB;
-          pos.z = this.z + len * cosB;
+    function anim() {
+      window.requestAnimationFrame(anim);
 
-          if (pos.x * pos.x + pos.y * pos.y + pos.z * pos.z < squareRange) {
-            passedExisting = true;
-            passedBuffered = true;
-            for (var i = 0; i < connections.length; ++i)
-              if (squareDist(pos, connections[i]) < squareAllowed)
-                passedExisting = false;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = opts.repaintColor;
+      ctx.fillRect(0, 0, w, h);
 
-            if (passedExisting)
-              for (var i = 0; i < links.length; ++i)
-                if (squareDist(pos, links[i]) < squareAllowed)
-                  passedBuffered = false;
+      ++tick;
 
-            if (passedExisting && passedBuffered)
-              links.push({ x: pos.x, y: pos.y, z: pos.z });
-          }
-        }
+      var rotX = tick * opts.rotVelX,
+        rotY = tick * opts.rotVelY;
 
-        if (links.length === 0) this.isEnd = true;
-        else {
-          for (var i = 0; i < links.length; ++i) {
-            var pos = links[i],
-              connection = new Connection(
-                pos.x,
-                pos.y,
-                pos.z,
-                this.size * opts.sizeMultiplier
-              );
+      cosX = Math.cos(rotX);
+      sinX = Math.sin(rotX);
+      cosY = Math.cos(rotY);
+      sinY = Math.sin(rotY);
 
-            this.links[i] = connection;
-            all.push(connection);
-            connections.push(connection);
-          }
-          for (var i = 0; i < this.links.length; ++i)
-            toDevelop.push(this.links[i]);
-        }
-      };
-      Connection.prototype.step = function () {
-        this.setScreen();
-        this.screen.color = (this.isEnd ? opts.endColor : opts.connectionColor)
-          .replace("light", 30 + ((tick * this.glowSpeed) % 30))
-          .replace("alp", 0.2 + (1 - this.screen.z / mostDistant) * 0.8);
-
-        for (var i = 0; i < this.links.length; ++i) {
-          ctx.moveTo(this.screen.x, this.screen.y);
-          ctx.lineTo(this.links[i].screen.x, this.links[i].screen.y);
-        }
-      };
-      Connection.rootStep = function () {
-        this.setScreen();
-        this.screen.color = opts.rootColor
-          .replace("light", 30 + ((tick * this.glowSpeed) % 30))
-          .replace("alp", (1 - this.screen.z / mostDistant) * 0.8);
-
-        for (var i = 0; i < this.links.length; ++i) {
-          ctx.moveTo(this.screen.x, this.screen.y);
-          ctx.lineTo(this.links[i].screen.x, this.links[i].screen.y);
-        }
-      };
-      Connection.prototype.draw = function () {
-        ctx.fillStyle = this.screen.color;
-        ctx.beginPath();
-        ctx.arc(
-          this.screen.x,
-          this.screen.y,
-          this.screen.scale * this.size,
-          0,
-          Tau
-        );
-        ctx.fill();
-      };
-      function Data(connection) {
-        this.glowSpeed =
-          opts.baseGlowSpeed + opts.addedGlowSpeed * Math.random();
-        this.speed = opts.baseSpeed + opts.addedSpeed * Math.random();
-
-        this.screen = {};
-
-        this.setConnection(connection);
-      }
-      Data.prototype.reset = function () {
-        this.setConnection(connections[0]);
-        this.ended = 2;
-      };
-      Data.prototype.step = function () {
-        this.proportion += this.speed;
-
-        if (this.proportion < 1) {
-          this.x = this.ox + this.dx * this.proportion;
-          this.y = this.oy + this.dy * this.proportion;
-          this.z = this.oz + this.dz * this.proportion;
-          this.size =
-            (this.os + this.ds * this.proportion) * opts.dataToConnectionSize;
-        } else this.setConnection(this.nextConnection);
-
-        this.screen.lastX = this.screen.x;
-        this.screen.lastY = this.screen.y;
-        this.setScreen();
-        this.screen.color = opts.dataColor
-          .replace("light", 40 + ((tick * this.glowSpeed) % 50))
-          .replace("alp", 0.2 + (1 - this.screen.z / mostDistant) * 0.6);
-      };
-      Data.prototype.draw = function () {
-        if (this.ended) return --this.ended; // not sre why the thing lasts 2 frames, but it does
-
-        ctx.beginPath();
-        ctx.strokeStyle = this.screen.color;
-        ctx.lineWidth = this.size * this.screen.scale;
-        ctx.moveTo(this.screen.lastX, this.screen.lastY);
-        ctx.lineTo(this.screen.x, this.screen.y);
-        ctx.stroke();
-      };
-      Data.prototype.setConnection = function (connection) {
-        if (connection.isEnd) this.reset();
-        else {
-          this.connection = connection;
-          this.nextConnection =
-            connection.links[(connection.links.length * Math.random()) | 0];
-
-          this.ox = connection.x; // original coordinates
-          this.oy = connection.y;
-          this.oz = connection.z;
-          this.os = connection.size; // base size
-
-          this.nx = this.nextConnection.x; // new
-          this.ny = this.nextConnection.y;
-          this.nz = this.nextConnection.z;
-          this.ns = this.nextConnection.size;
-
-          this.dx = this.nx - this.ox; // delta
-          this.dy = this.ny - this.oy;
-          this.dz = this.nz - this.oz;
-          this.ds = this.ns - this.os;
-
-          this.proportion = 0;
-        }
-      };
-      Connection.prototype.setScreen = Data.prototype.setScreen = function () {
-        var x = this.x,
-          y = this.y,
-          z = this.z;
-
-        // apply rotation on X axis
-        var Y = y;
-        y = y * cosX - z * sinX;
-        z = z * cosX + Y * sinX;
-
-        // rot on Y
-        var Z = z;
-        z = z * cosY - x * sinY;
-        x = x * cosY + Z * sinY;
-
-        this.screen.z = z;
-
-        // translate on Z
-        z += opts.depth;
-
-        this.screen.scale = opts.focalLength / z;
-        this.screen.x = opts.vanishPoint.x + x * this.screen.scale;
-        this.screen.y = opts.vanishPoint.y + y * this.screen.scale;
-      };
-      function squareDist(a, b) {
-        var x = b.x - a.x,
-          y = b.y - a.y,
-          z = b.z - a.z;
-
-        return x * x + y * y + z * z;
+      if (data.length < connections.length * opts.dataToConnections) {
+        var datum = new Data(connections[0]);
+        data.push(datum);
+        all.push(datum);
       }
 
-      function anim() {
-        window.requestAnimationFrame(anim);
-
-        ctx.globalCompositeOperation = "source-over";
-        ctx.fillStyle = opts.repaintColor;
-        ctx.fillRect(0, 0, w, h);
-
-        ++tick;
-
-        var rotX = tick * opts.rotVelX,
-          rotY = tick * opts.rotVelY;
-
-        cosX = Math.cos(rotX);
-        sinX = Math.sin(rotX);
-        cosY = Math.cos(rotY);
-        sinY = Math.sin(rotY);
-
-        if (data.length < connections.length * opts.dataToConnections) {
-          var datum = new Data(connections[0]);
-          data.push(datum);
-          all.push(datum);
-        }
-
-        ctx.globalCompositeOperation = "lighter";
-        ctx.beginPath();
-        ctx.lineWidth = opts.wireframeWidth;
-        ctx.strokeStyle = opts.wireframeColor;
-        all.map(function (item) {
-          item.step();
-        });
-        ctx.stroke();
-        ctx.globalCompositeOperation = "source-over";
-        all.sort(function (a, b) {
-          return b.screen.z - a.screen.z;
-        });
-        all.map(function (item) {
-          item.draw();
-        });
-
-        /*ctx.beginPath();
-            ctx.strokeStyle = 'red';
-            ctx.arc( opts.vanishPoint.x, opts.vanishPoint.y, opts.range * opts.focalLength / opts.depth, 0, Tau );
-            ctx.stroke();*/
-      }
-
-      window.addEventListener("resize", function () {
-        opts.vanishPoint.x = (w = c.width = window.innerWidth) / 2;
-        opts.vanishPoint.y = (h = c.height = window.innerHeight) / 2;
-        ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.beginPath();
+      ctx.lineWidth = opts.wireframeWidth;
+      ctx.strokeStyle = opts.wireframeColor;
+      all.map(function (item) {
+        item.step();
       });
-      window.addEventListener("click", init);
-    </script>
-  </body>
+      ctx.stroke();
+      ctx.globalCompositeOperation = "source-over";
+      all.sort(function (a, b) {
+        return b.screen.z - a.screen.z;
+      });
+      all.map(function (item) {
+        item.draw();
+      });
+
+      /*ctx.beginPath();
+          ctx.strokeStyle = 'red';
+          ctx.arc( opts.vanishPoint.x, opts.vanishPoint.y, opts.range * opts.focalLength / opts.depth, 0, Tau );
+          ctx.stroke();*/
+    }
+
+    window.addEventListener("resize", function () {
+      opts.vanishPoint.x = (w = c.width = window.innerWidth) / 2;
+      opts.vanishPoint.y = (h = c.height = window.innerHeight) / 2;
+      ctx.fillRect(0, 0, w, h);
+    });
+    window.addEventListener("click", init);
+  </script>
+</body>
+
 </html>
