@@ -18,7 +18,7 @@ class AudioFile(db.Model):
 #with app.app_context():
     #db.create_all()
     
-def fetch_bird_image(bird_name, api_key = "ffPnG8Fl26jOZAJnlpO4nwid7eZ_WaPcMY_Wasy_TPU"):
+def fetch_bird_image(bird_name, api_key = api_key):
     url = f"https://api.unsplash.com/search/photos/?query={bird_name}&client_id={api_key}"
     response = requests.get(url)
     data = response.json()
