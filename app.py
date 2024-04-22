@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import pandas as pd
 import requests
+from bs4 import BeautifulSoup
+import urllib
 from werkzeug.utils import secure_filename
 from model_call import *
 from flask import Flask, render_template, request, redirect, url_for, send_file, send_from_directory, jsonify
@@ -18,7 +20,7 @@ class AudioFile(db.Model):
 #with app.app_context():
     #db.create_all()
     
-def fetch_bird_image(bird_name, api_key = api_key):
+def fetch_bird_image(bird_name, api_key = "ffPnG8Fl26jOZAJnlpO4nwid7eZ_WaPcMY_Wasy_TPU"):
     url = f"https://api.unsplash.com/search/photos/?query={bird_name}&client_id={api_key}"
     response = requests.get(url)
     data = response.json()
@@ -75,6 +77,7 @@ def upload():
         lat_list = lat.tolist()
         long_list = long.tolist()
         image_url = None
+        
         try:
             image_url = fetch_bird_image(data, )
         
