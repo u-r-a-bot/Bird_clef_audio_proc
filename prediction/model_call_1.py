@@ -383,22 +383,17 @@ def download_file_from_google_drive(file_id, destination):
     gdown.download(url, destination, quiet=False)
 
 
-def get_top_indices(softmax_logits, threshold_margin = 0.99, threshold_entropy= 0.1):
-    # Calculate margin between top probabilities
+def get_top_indices(softmax_logits, threshold_margin = 0.80, threshold_entropy= 0.5):
+
     top_indices = torch.argsort(softmax_logits, descending=True)
     margin = softmax_logits[top_indices[0]] - softmax_logits[top_indices[-1]]
 
-    # Calculate entropy
     entropy = -torch.sum(softmax_logits * torch.log(softmax_logits)).item()
 
-    # Use a combination of criteria
-    if margin > threshold_margin :
-        if entropy > threshold_entropy:
-            num_top_probs_needed = 6
-        else:
-            num_top_probs_needed = 3
-    elif margin > threshold_margin or entropy > threshold_entropy:
+    if margin > threshold_margin:
         num_top_probs_needed = 4
+    elif margin > threshold_margin or entropy > threshold_entropy:
+        num_top_probs_needed = 6
     else:
         num_top_probs_needed = 6
 
@@ -437,4 +432,8 @@ def get_predictions(inp_path):
         probs_dict = {}
         for name, probs in zip(top_class_names , top_probs):
             probs_dict[name] = probs
+    sorted_footballers_by_goals = sorted(probs_dict.items(), key=lambda x:x[1])
     return probs_dict
+
+probs_and_names = get_predictions("/kaggle/input/birdclef-2023/train_audio/abhori1/XC196761.ogg")
+probs_and_names
