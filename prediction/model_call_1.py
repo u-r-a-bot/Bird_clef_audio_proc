@@ -383,33 +383,34 @@ def download_file_from_google_drive(file_id, destination):
     gdown.download(url, destination, quiet=False)
 
 
-def get_top_indices(softmax_logits, threshold_margin, threshold_entropy):
+def get_top_indices(softmax_logits, threshold_margin = 0.99, threshold_entropy= 0.1):
+    # Calculate margin between top probabilities
+    top_indices = torch.argsort(softmax_logits, descending=True)
+    margin = softmax_logits[top_indices[0]] - softmax_logits[top_indices[-1]]
 
-    if len(softmax_logits.shape) == 1:
-        num_top_probs_needed = min(6, len(softmax_logits))
-        top_indices = torch.argsort(softmax_logits, descending=True)[:num_top_probs_needed]
-    else:
+    # Calculate entropy
+    entropy = -torch.sum(softmax_logits * torch.log(softmax_logits)).item()
 
-        top_indices = torch.argsort(softmax_logits, descending=True)
-        margin = softmax_logits[top_indices[0]] - softmax_logits[top_indices[-1]]
-
-        entropy = -torch.sum(softmax_logits * torch.log(softmax_logits), dim=1).item()
-
-        if margin > threshold_margin and entropy > threshold_entropy:
+    # Use a combination of criteria
+    if margin > threshold_margin :
+        if entropy > threshold_entropy:
             num_top_probs_needed = 6
-        elif margin > threshold_margin or entropy > threshold_entropy:
-            num_top_probs_needed = 4
         else:
             num_top_probs_needed = 3
+    elif margin > threshold_margin or entropy > threshold_entropy:
+        num_top_probs_needed = 4
+    else:
+        num_top_probs_needed = 6
 
-        top_indices = top_indices[:num_top_probs_needed]
+    top_indices = top_indices[:num_top_probs_needed]
 
     return top_indices
 
 
 
 
-def get_predictions(inp_path, threshold_margin=0.1, threshold_entropy=0.1): 
+
+def get_predictions(inp_path): 
     file_id = "1uuYaUhLnZGdzT5iLaFweACWrY7WNET-3"
     destination = "efficientvit.pth"
     model_path = Path("efficientvit.pth")
@@ -427,7 +428,7 @@ def get_predictions(inp_path, threshold_margin=0.1, threshold_entropy=0.1):
     with torch.inference_mode():
         y_logits = loaded_model(audio)
         y_preds = torch.softmax(y_logits, dim=1).squeeze()
-        top_indices = get_top_indices(y_preds, threshold_margin, threshold_entropy)
+        top_indices = get_top_indices(y_preds)
         top_probs = [y_preds[i].item() for i in top_indices]
         tot_sum = sum(top_probs)
         top_probs = [top_probs[i] / tot_sum for i in range(len(top_probs))]
