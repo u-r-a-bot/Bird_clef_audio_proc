@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import google.generativeai as genai
 import requests
 from bs4 import BeautifulSoup
-
+from pathlib import Path
+import os
+all_audios = Path("all_audios")
 
 
 def get_wikipedia_IUCN_image(species_name):
@@ -64,3 +66,12 @@ def specshow_with_separator(file_path, save_path, sampling_rate=32000, n_fft=102
     plt.axis('off') 
     plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
     plt.close()
+    
+    
+if all_audios.exists == False:
+    print("Audio Files Not found")
+def get_audio_path(bird_name, path= all_audios):
+    all_paths =  path.glob("*.ogg")
+    for path in all_paths:
+        if bird_name in str(path):
+            return path.as_posix()
