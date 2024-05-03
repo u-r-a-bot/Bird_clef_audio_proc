@@ -68,9 +68,10 @@ def specshow_with_separator(file_path, save_path, sampling_rate=32000, n_fft=102
     plt.close()
     
     
-if all_audios.exists == False:
-    print("Audio Files Not found")
+
 def get_audio_path(bird_name, path= all_audios):
+    if all_audios.exists == False:
+        print("Audio Files Not found")
     all_paths =  path.glob("*.ogg")
     for path in all_paths:
         if bird_name in str(path):
