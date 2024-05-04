@@ -3,12 +3,15 @@ import librosa.display
 import numpy as np
 device = "cpu"
 import matplotlib.pyplot as plt
+import matplotlib
 import google.generativeai as genai
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
 import os
+import pickle
 all_audios = Path("all_audios")
+matplotlib.use("agg")
 
 
 def get_wikipedia_IUCN_image(species_name):
@@ -76,3 +79,73 @@ def get_audio_path(bird_name, path= all_audios):
     for path in all_paths:
         if bird_name in str(path):
             return path.as_posix()
+        
+        
+def specie_loader():
+    utils_folder = Path("utils")
+    utils_file = utils_folder / "utils.pkl"
+    if utils_folder.exists() and utils_file.exists():
+        print("Skipping specie already exist... ")
+        with open(utils_file , "rb") as f:
+            specie_to_name = pickle.load(f)
+        name_to_specie = {value: key for key, value in specie_to_name.items()}
+        return name_to_specie
+    else :
+        print("Downloading species now... ")
+        utils_folder.mkdir(exist_ok = True , parents = True)
+        request = requests.get("https://github.com/u-r-a-bot/Bird_clef_audio_proc/raw/main/utils/utils.pkl")
+        with open(utils_file , "wb") as f:
+            f.write(request.content)
+        print("Downloading Complete.. \n Now loading Utilities")
+        with open(utils_file , "rb") as f:
+            specie_to_name = pickle.load(f)
+        name_to_specie = {value: key for key, value in specie_to_name.items()}
+        return name_to_specie
+
+def get_ebird_image(bird_name, desired_width=1200):
+    specie_names = specie_loader()
+#     print(specie_names)
+    bird_name = specie_names[bird_name]
+    search_url = f"https://ebird.org/species/{bird_name}"
+
+    response = requests.get(search_url)
+
+
+    if response.status_code == 200:
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+
+        button_element = soup.find('button', class_='AspectRatioContent Species-media-button')
+
+        if button_element:
+
+            img_element = button_element.find('img', class_='Species-media-image')
+            if img_element:
+
+                srcset = img_element['srcset']
+                urls_and_sizes = srcset.split(',')
+                selected_url = None
+                min_difference = float('inf')
+                for url_and_size in urls_and_sizes:
+                    url_and_size_parts = url_and_size.strip().split(' ')
+                    if len(url_and_size_parts) == 2:  
+                        url, size = url_and_size_parts
+                        width = int(size[:-1])  
+                        difference = abs(width - desired_width)
+                        if difference < min_difference:
+                            min_difference = difference
+                            selected_url = url
+                return selected_url
+            else:
+                print("No image found.")
+                return None
+        else:
+            print("No button element found.")
+            return None
+    else:
+        print("Failed to retrieve search results.")
+        return None
+
+
+
