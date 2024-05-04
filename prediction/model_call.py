@@ -357,13 +357,41 @@ def preprocess_audio(audio_path, sampling_rate = 32000 , num_mels = 128 ,
     return audio
 
 
+def get_top_indices(softmax_logits, threshold_margin = 0.80, threshold_entropy= 0.4):
+
+    top_indices = torch.argsort(softmax_logits, descending=True)
+    margin = softmax_logits[top_indices[0]] - softmax_logits[top_indices[-1]]
+
+    entropy = -torch.sum(softmax_logits * torch.log(softmax_logits)).item()
+
+    if margin > threshold_margin :
+        if entropy > threshold_entropy:
+            num_top_probs_needed = 6
+        else:
+            num_top_probs_needed = 3
+    elif margin > threshold_margin or entropy > threshold_entropy:
+        num_top_probs_needed = 4
+    else:
+        num_top_probs_needed = 6
+
+    top_indices = top_indices[:num_top_probs_needed]
+
+    return top_indices
+
+
+
+
+
 def get_predictions(inp_path ): 
     state_dict_file_url = "https://github.com/u-r-a-bot/Bird_clef_audio_proc/raw/main/prediction/model_effnet_b0_state_dict.pth"
     model_path_state_dict = Path("model_effnet_b0_state_dict.pth")
-    print("Model Downloading")
-    request = requests.get(state_dict_file_url)
-    with open(model_path_state_dict, "wb") as f:
-        f.write(request.content)
+    if model_path_state_dict.exists():
+        print("Skipping download")
+    else:
+        print("Model Downloading")
+        request = requests.get(state_dict_file_url)
+        with open(model_path_state_dict, "wb") as f:
+            f.write(request.content)
     
     audio = preprocess_audio(audio_path=inp_path)
     try:
@@ -386,10 +414,16 @@ def get_predictions(inp_path ):
     loaded_model.eval()
     with torch.inference_mode():
         y_logits = loaded_model(audio)
-        y_preds = torch.softmax(y_logits, dim = 1)
-        y_label = torch.argmax(y_preds , dim = 1)
-    y_label = y_label.numpy()[0]
-    return specie_to_name[target_labels[y_label]]
-
+        y_preds = torch.softmax(y_logits, dim = 1).squeeze()
+        top_indices = get_top_indices(y_preds)
+        top_probs = [y_preds[i].item() for i in top_indices]
+        tot_sum = sum(top_probs)
+        top_probs = [top_probs[i] / tot_sum for i in range(len(top_probs))]
+        top_classes = [target_labels[i] for i in top_indices]
+        top_class_names = [specie_to_name[i] for i in top_classes]
+        probs_dict = {}
+        for name, probs in zip(top_class_names , top_probs):
+            probs_dict[name] = probs
+    return probs_dict
 
 
